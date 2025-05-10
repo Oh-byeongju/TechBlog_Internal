@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
     images: {
-        domains: ['images.unsplash.com', 'localhost', '10.10.20.187'],
+        domains: ['images.unsplash.com', 'localhost'],
     },
     reactStrictMode: false,
 

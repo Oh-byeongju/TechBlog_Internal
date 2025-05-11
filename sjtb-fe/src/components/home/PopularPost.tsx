@@ -3,11 +3,14 @@
 import {AxiosResponse} from "axios";
 import {useEffect} from "react";
 import {useQuery} from "react-query";
+import {useRecoilState} from "recoil";
 
 import {IPostData} from "@/types/interfaces/post-interface";
 import axiosClient from "@/libs/axiosClient";
 import useBreakPoint from "@/hooks/useBreakPoint";
 import {EBreakPoint} from "@/types/enums/common-enum";
+import {IApiState} from "@/types/interfaces/api-interface";
+import {apiAtom} from "@/atoms/apiAtom";
 
 import Label from "@/components/label/Label";
 import ColumnPostMotion from "@/components/post/ColumnPostMotion";
@@ -19,6 +22,7 @@ const popPost = (): Promise<AxiosResponse<IPostData[]>> => {
 
 const PopularPost = () => {
     const breakPoint = useBreakPoint();
+    const [apiState, setApiState] = useRecoilState<IApiState>(apiAtom);
 
     const result_popPostAPI = useQuery(
         ["result_popPostAPI"],
@@ -29,8 +33,15 @@ const PopularPost = () => {
     );
 
     useEffect(() => {
-        result_popPostAPI.refetch();
-    }, [])
+        // routerPush 또는 새로고침일 경우에만 조회
+        if (!apiState.result_popPostAPI) {
+            result_popPostAPI.refetch();
+            setApiState((prevState) => ({
+                ...prevState,
+                result_popPostAPI: true
+            }));
+        }
+    }, []);
 
     return (
         <>

@@ -28,7 +28,9 @@ const PopularPost = () => {
         ["result_popPostAPI"],
         () => popPost(),
         {
-            enabled: false
+            enabled: false,
+            cacheTime: Infinity,
+            staleTime: Infinity
         }
     );
 

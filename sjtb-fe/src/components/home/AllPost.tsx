@@ -29,7 +29,9 @@ const AllPost = () => {
         ["result_allPostAPI"],
         () => allPostAPI(),
         {
-            enabled: false
+            enabled: false,
+            cacheTime: Infinity,
+            staleTime: Infinity
         }
     )
 

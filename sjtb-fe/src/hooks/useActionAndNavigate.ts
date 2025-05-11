@@ -19,6 +19,7 @@ const useActionAndNavigate = () => {
             setApiState(prev => ({
                 ...prev,
                 result_popPostAPI: false,
+                result_allPostAPI: false
             }))
         }
 

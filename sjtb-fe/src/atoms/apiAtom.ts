@@ -5,6 +5,7 @@ import {IApiState} from "@/types/interfaces/api-interface";
 export const apiAtom = atom<IApiState>({
     key: 'apiAtom',
     default: {
-        result_popPostAPI: false
+        result_popPostAPI: false,
+        result_allPostAPI: false
     },
 });

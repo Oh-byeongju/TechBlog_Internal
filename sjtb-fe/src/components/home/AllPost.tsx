@@ -3,11 +3,14 @@
 import {useQuery} from "react-query";
 import {useEffect, useState} from "react";
 import {AxiosResponse} from "axios";
+import {useRecoilState} from "recoil";
 
 import {EBlank, EBreakPoint} from "@/types/enums/common-enum";
 import axiosClient from "@/libs/axiosClient";
 import {IPostData} from "@/types/interfaces/post-interface";
 import useBreakPoint from "@/hooks/useBreakPoint";
+import {IApiState} from "@/types/interfaces/api-interface";
+import {apiAtom} from "@/atoms/apiAtom";
 
 import Label from "@/components/label/Label";
 import RowPost from "@/components/post/RowPost";
@@ -20,9 +23,10 @@ const allPostAPI = ():Promise<AxiosResponse<IPostData[]>>  => {
 
 const AllPost = () => {
     const breakPoint = useBreakPoint();
+    const [apiState, setApiState] = useRecoilState<IApiState>(apiAtom);
 
     const result_allPostAPI = useQuery(
-        ["result_searchAPI"],
+        ["result_allPostAPI"],
         () => allPostAPI(),
         {
             enabled: false
@@ -30,8 +34,15 @@ const AllPost = () => {
     )
 
     useEffect(() => {
-        result_allPostAPI.refetch();
-    }, [])
+        // routerPush 또는 새로고침일 경우에만 조회
+        if (!apiState.result_allPostAPI) {
+            result_allPostAPI.refetch();
+            setApiState((prevState) => ({
+                ...prevState,
+                result_allPostAPI: true
+            }));
+        }
+    }, []);
 
     return (
         <>

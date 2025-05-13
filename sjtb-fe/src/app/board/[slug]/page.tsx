@@ -3,11 +3,14 @@
 import {useEffect, useState} from 'react';
 import {useQuery} from "react-query";
 import {AxiosResponse} from "axios";
+import {useRecoilState} from "recoil";
 
 import {EBannerType, EBlank} from '@/types/enums/common-enum';
 import {IPostData} from "@/types/interfaces/post-interface";
 import axiosClient from "@/libs/axiosClient";
 import useActionAndNavigate from "@/hooks/useActionAndNavigate";
+import {IApiState} from "@/types/interfaces/api-interface";
+import {apiAtom} from "@/atoms/apiAtom";
 
 import Blank from '@/components/blank/Blank';
 import PageContainer from '@/components/containers/PageContainer';
@@ -19,7 +22,6 @@ import TagList from '@/components/read/TagList';
 import ActivityBox from '@/components/read/ActivityBox';
 import EditorSection from "@/components/edit/EditorSection";
 import Summary from "@/components/read/Summary";
-
 
 interface Props {
     params: {
@@ -35,8 +37,8 @@ const getPostBySlugAPI = (slug: string): Promise<AxiosResponse<IPostData>> => {
 
 const Post = (props: Props) => {
     const [post, setPost] = useState<IPostData | undefined>();
-    const [content, setContent] = useState<string>('');
     const actionAndNavigate = useActionAndNavigate();
+    const [apiState, setApiState] = useRecoilState<IApiState>(apiAtom);
 
     const result_getPostBySlugAPI = useQuery(
         ["result_getPostBySlugAPI"],
@@ -47,13 +49,25 @@ const Post = (props: Props) => {
             },
             onError: () => {
                 actionAndNavigate.actionAndNavigate('/');
-            }
+            },
+            enabled: false,
+            cacheTime: Infinity,
+            staleTime: Infinity
         }
     );
 
     useEffect(() => {
-        result_getPostBySlugAPI.refetch();
-    }, [])
+        // routerPush 또는 새로고침일 경우에만 조회
+        if (!apiState.result_getPostBySlugAPI) {
+            result_getPostBySlugAPI.refetch();
+            setApiState((prevState) => ({
+                ...prevState,
+                result_getPostBySlugAPI: true
+            }));
+        } else {
+            setPost(result_getPostBySlugAPI.data?.data);
+        }
+    }, []);
 
     return (
         <PageContainer>

@@ -14,6 +14,8 @@ import {IAPIResponse} from "@/types/interfaces/common-interface";
 import axiosServer from "@/libs/axiosServer";
 import {IMG} from "@/contants/common";
 import {writerAtom} from "@/atoms/writerAtom";
+import {apiAtom} from "@/atoms/apiAtom";
+import {IApiState} from "@/types/interfaces/api-interface";
 
 import Icons from "@/components/Icons";
 import styles from './WriterInfo.module.scss';
@@ -28,18 +30,28 @@ async function serverAPI_userInfo(param: IParam_UserInfo): Promise<AxiosResponse
 
 const WriterInfo = ({ author }: Props) => {
     const [, setUserInfo] = useRecoilState(writerAtom);
+    const [apiState, setApiState] = useRecoilState<IApiState>(apiAtom);
 
     const result_UserInfo = useQuery(
         ["result_UserInfo", author],
         () => serverAPI_userInfo({ userId: author }).then(res => res),
         {
             enabled: false,
+            cacheTime: Infinity,
+            staleTime: Infinity,
             onSuccess: (data) => setUserInfo(data?.data.content),
         }
     )
 
     useEffect(() => {
-        result_UserInfo.refetch();
+        // routerPush 또는 새로고침일 경우에만 조회
+        if (!apiState.result_UserInfo) {
+            result_UserInfo.refetch();
+            setApiState((prevState) => ({
+                ...prevState,
+                result_UserInfo: true
+            }));
+        }
     }, [author]);
 
     return (

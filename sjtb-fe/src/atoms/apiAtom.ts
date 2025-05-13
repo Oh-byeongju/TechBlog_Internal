@@ -6,6 +6,10 @@ export const apiAtom = atom<IApiState>({
     key: 'apiAtom',
     default: {
         result_popPostAPI: false,
-        result_allPostAPI: false
+        result_allPostAPI: false,
+        result_getPostBySlugAPI: false,
+        result_UserInfo: false,
+        result_CountList: false,
+        result_CmmtList: false
     },
 });

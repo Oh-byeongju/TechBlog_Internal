@@ -3,6 +3,7 @@ import React from "react";
 
 import RecoilRootWrapper from "@/providers/RecoilWrapper";
 import ReactQueryWrapper from "@/providers/ReactQueryWrapper";
+import ScrollRestoreProvider from "@/providers/ScrollRestoreProvider";
 import {getMetadata} from "@/seo/metadata/getMetadata";
 
 import HeaderBase from "@/components/header/HeaderBase";
@@ -43,21 +44,23 @@ export default function RootLayout({children}: Props) {
         <body style={{backgroundColor: `var(--color-background-1)`}}>
         <ReactQueryWrapper>
             <RecoilRootWrapper>
-                <MainContainer>
-                    {/* eslint-disable-next-line react/jsx-key */}
-                    <HeaderBase left={[<HeaderLogo/>, <HeaderSearch/>]} right={[<HeaderAction/>, <HeaderProfile/>]}/>
-                    {children}
-                    <FooterBase/>
-                    <ModalMutation/>
-                    <BoardOptionPopup/>
-                    <ProfileOptionPopup/>
-                    <EditProfilePopup/>
-                    <SignInPopup/>
-                    <SignUpPopup/>
-                    <ConfirmPopup/>
-                    <NotifyPopup/>
-                    <SearchPopup/>
-                </MainContainer>
+                <ScrollRestoreProvider>
+                    <MainContainer>
+                        {/* eslint-disable-next-line react/jsx-key */}
+                        <HeaderBase left={[<HeaderLogo/>, <HeaderSearch/>]} right={[<HeaderAction/>, <HeaderProfile/>]}/>
+                        {children}
+                        <FooterBase/>
+                        <ModalMutation/>
+                        <BoardOptionPopup/>
+                        <ProfileOptionPopup/>
+                        <EditProfilePopup/>
+                        <SignInPopup/>
+                        <SignUpPopup/>
+                        <ConfirmPopup/>
+                        <NotifyPopup/>
+                        <SearchPopup/>
+                    </MainContainer>
+                </ScrollRestoreProvider>
             </RecoilRootWrapper>
         </ReactQueryWrapper>
         </body>

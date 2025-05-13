@@ -31,3 +31,6 @@ export interface IBreakPoint {
     breakPoint: EBreakPoint;
 }
 
+export interface IRouterState {
+    routerState: boolean;
+}

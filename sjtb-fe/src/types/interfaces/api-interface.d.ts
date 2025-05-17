@@ -6,4 +6,6 @@ export interface IApiState {
     result_UserInfo: boolean;
     result_CountList: boolean;
     result_CmmtList: boolean;
+    result_keyword: string;
+    result_searchAPI: boolean;
 }

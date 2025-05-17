@@ -3,11 +3,14 @@
 import {useEffect} from "react";
 import {useQuery} from "react-query";
 import {AxiosResponse} from "axios";
+import {useRecoilState} from "recoil";
 
 import {EBlank, EBreakPoint} from "@/types/enums/common-enum";
 import axiosClient from "@/libs/axiosClient";
 import {IPostData} from "@/types/interfaces/post-interface";
 import useBreakPoint from "@/hooks/useBreakPoint";
+import {apiAtom} from "@/atoms/apiAtom";
+import {IApiState} from "@/types/interfaces/api-interface";
 
 import styles from "@/components/search/SearchPost.module.scss";
 import Label from "@/components/label/Label";
@@ -23,20 +26,29 @@ const searchAPI = (searchTerm: string):Promise<AxiosResponse<IPostData[]>> => {
 
 const SearchPost = ({keyword}: { keyword: string }) => {
     const breakPoint = useBreakPoint();
+    const [apiState, setApiState] = useRecoilState<IApiState>(apiAtom);
 
     const result_searchAPI = useQuery(
         ["result_searchAPI"],
         () => searchAPI(keyword),
         {
             enabled: false,
+            cacheTime: Infinity,
+            staleTime: Infinity
         }
     )
 
     useEffect(() => {
-        result_searchAPI.refetch();
-    }, [keyword])
-
-    console.log("keyword : " + keyword)
+        // routerPush 또는 새로고침일 경우에만 조회
+        if (!apiState.result_searchAPI || keyword !== apiState.result_keyword) {
+            result_searchAPI.refetch();
+            setApiState((prevState) => ({
+                ...prevState,
+                result_keyword: keyword,
+                result_searchAPI: true
+            }));
+        }
+    }, []);
 
     return (
         <div className={styles.baseContainer}>

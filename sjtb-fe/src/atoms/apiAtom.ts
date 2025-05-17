@@ -11,6 +11,8 @@ export const apiAtom = atom<IApiState>({
         result_getPostBySlugAPI: false,
         result_UserInfo: false,
         result_CountList: false,
-        result_CmmtList: false
+        result_CmmtList: false,
+        result_keyword: "",
+        result_searchAPI: false
     },
 });

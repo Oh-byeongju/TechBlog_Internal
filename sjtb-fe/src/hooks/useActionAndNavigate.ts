@@ -36,7 +36,8 @@ const useActionAndNavigate = () => {
         } else if (/^\/board\/search\/.+$/.test(url)) {
             // 검색 결과 페이지
             setApiState(prev => ({
-                ...prev
+                ...prev,
+                result_searchAPI: false
             }));
         } else if (/^\/board\/\d+$/.test(url)) {
             // 게시글 상세 페이지

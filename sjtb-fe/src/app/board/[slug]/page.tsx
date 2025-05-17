@@ -58,10 +58,11 @@ const Post = (props: Props) => {
 
     useEffect(() => {
         // routerPush 또는 새로고침일 경우에만 조회
-        if (!apiState.result_getPostBySlugAPI) {
+        if (!apiState.result_getPostBySlugAPI || props.params.slug !== apiState.result_slug) {
             result_getPostBySlugAPI.refetch();
             setApiState((prevState) => ({
                 ...prevState,
+                result_slug: props.params.slug,
                 result_getPostBySlugAPI: true
             }));
         } else {

@@ -43,6 +43,7 @@ const Like = ({ slug }: Props) => {
     const [isAnimating, setIsAnimating] = useState(false);
     const [isHovered, setIsHovered] = useState(false); // Hover 상태 추가
 
+    // slug가 바뀌면 동작하는 쿼리라서 routerPush 또는 새로고침일 경우에만 조회됨
     const result_CountList = useQuery(
         ["result_CountList", slug],
         () => serverAPI_CountList({ boadId: parseInt(slug) }),

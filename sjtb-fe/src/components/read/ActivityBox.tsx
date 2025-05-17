@@ -21,9 +21,9 @@ async function serverAPI_CmmtList(param: IParam_CmmtList): Promise<AxiosResponse
     return await axiosServer.get('/public/get/cmmt/list', {params: param});
 }
 
-
 const ActivityBox = ({slug}: Props) => {
 
+    // slug가 바뀌면 동작하는 쿼리라서 routerPush 또는 새로고침일 경우에만 조회됨
     const result_CmmtList = useQuery(
         ["serverAPI_CmmtList", slug],
         () => serverAPI_CmmtList({boadId: parseInt(slug)})

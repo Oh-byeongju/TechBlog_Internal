@@ -7,6 +7,7 @@ export const apiAtom = atom<IApiState>({
     default: {
         result_popPostAPI: false,
         result_allPostAPI: false,
+        result_slug: "",
         result_getPostBySlugAPI: false,
         result_UserInfo: false,
         result_CountList: false,

@@ -236,87 +236,10 @@ public class BoadService extends BaseService {
     }
 
     /*
-    * 게시글 입력
-    * 추후 MD파일 작성하는 로직 추가필요
-    * */
-    @Transactional
-    public ResultVo BoadInsert(HttpServletRequest request, BoadRequestDto reqBoad){
-        ResultVo result = new ResultVo();
-        String userId = "";
-        Integer boadId = 0;
-        try {
-            UserEntity user = userRepository.findById(reqBoad.getUserid());
-            userId = user.getUserId();
-            ImgFileEntity imgFileEntity = null;
-
-
-
-            if(!FrameStringUtil.isNull(reqBoad.getThumbnailid())) {
-                imgFileEntity = imgFileRepository.getById(reqBoad.getThumbnailid());
-            } else {
-                imgFileEntity = imgFileRepository.getById(1);
-            }
-            
-            /// view, like 값 null 말고 0으로 넣어주기
-            
-            BoadEntity boad = BoadEntity.builder()
-                    .user(user)
-                    .title(reqBoad.getTitle())
-                    .thumbnail(imgFileEntity)
-                    .openStatus("1")
-                    .summary(makeInitSummarty(reqBoad))
-                    .useYN("Y")
-                    .firsRegDt(LocalDateTime.now())
-                    .firsRegId(reqBoad.getUserid())
-                    .firsRegIp(FrameHttpUtil.getUserIp(request))
-                    .finaRegDt(LocalDateTime.now())
-                    .finaRegId(reqBoad.getUserid())
-                    .finaRegIp(FrameHttpUtil.getUserIp(request))
-                    .build();
-
-            BoadEntity boadResult = boadRepository.save(boad);
-
-//            List<BoadContEntity> boadContEntities = reqBoad.getConts().stream()
-//                    .map(dto -> {
-//                        BoadContId newId = new BoadContId();
-//                        newId.setBoadid(boadResult.getBoadId());
-//                        BoadContEntity boadContEntity = BoadContEntity.builder()
-//                                .boadid(boadResult.getBoadId())
-//                                .contcate(dto.getContcate())
-//                                .cont(dto.getCont())
-//                                .firsRegDt(LocalDateTime.now())
-//                                .firsRegId(boadResult.getUser().getUserId())
-//                                .firsRegIp(FrameHttpUtil.getUserIp(request))
-//                                .build();
-//                        return boadContEntity;
-//                    })
-//                    .collect(Collectors.toList());
-
-//            boadContRepository.saveAll(boadContEntities);
-
-            //해시태그는 GPT 요약할때 같이 동작되야해서 코드 이동(GptService)
-
-//            boadResult.builder().conts(boadContEntities).build();
-
-            mdService.makeMDFile(boadResult, reqBoad.getBoadConts());
-            result.setContent("게시물 저장 성공");
-        } catch( Exception e) {
-            e.printStackTrace();
-            result.setIsError(true);
-            result.setErrorMsg("Error At Boad Insert");
-        } finally {
-            saveClientLog(userId, FrameConstants.BOARD_INSERT, boadId, FrameHttpUtil.clientBroswserInfo(request));
-        }
-        return result;
-    }
-    
-    /*
-     * 게시물 입력 임시
-     * MD 가공에 대한 코드가 빠져있음 -> 임대리님이 GPT 안정화 작업 완료되면 메소드 수정하면 될듯
+     * 게시글 입력
      * */
-    //todo: md 헤더에 openStatus가 들어가야할듯?
     @Transactional
-    public ResultVo<BoadResponseDto> BoadInsertTemp(HttpServletRequest request, BoadRequestDto reqBoad){
+    public ResultVo<BoadResponseDto> BoadInsert(HttpServletRequest request, BoadRequestDto reqBoad){
         ResultVo<BoadResponseDto> result = new ResultVo<>(BoadResponseDto.class);
 
         String userId = SecurityUserUtil.getCurrentUser();
@@ -416,12 +339,9 @@ public class BoadService extends BaseService {
 
             param.put("slug", String.valueOf(boadResult.getBoadId()));
             param.put("title", reqBoad.getTitle());
-
-            /// 수정이 필요한 부분
             param.put("description", summary);
             param.put("thumbnail", thumbnailPath);
             param.put("keywords", cleanHashTagList(hashTagList));
-            /// 수정이 필요한 부분
 
             param.put("author", userId);
             param.put("datePublished", FrameDateUtil.formatLocalDateTimeWithPattern(boadResult.getFirsRegDt(), "yyyy-MM-dd HH:mm:ss"));
@@ -572,7 +492,6 @@ public class BoadService extends BaseService {
                     reqBoad.getBoadid());
 
             // update된 자료 조회
-            // 이거 바로 조회가 안되는 이슈가 있는데.. 나중에 처리하기
             boadResult = boadRepository.findByBoadId(reqBoad.getBoadid());
 
             // 리턴값 가공

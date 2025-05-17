@@ -60,14 +60,8 @@ public class BoadController extends BaseController {
 
     /*게시물 입력*/
     @PostMapping("/private/post/boad/inst")
-    public ResultVo BoadInsert(HttpServletRequest request, @RequestBody BoadRequestDto boad){
+    public ResultVo<BoadResponseDto> BoadInsert(HttpServletRequest request, @RequestBody BoadRequestDto boad) {
         return boadService.BoadInsert(request, boad);
-    }
-
-    /*게시물 입력 임시*/
-    @PostMapping("/private/post/boad/instTemp")
-    public ResultVo<BoadResponseDto> BoadInsertTemp(HttpServletRequest request, @RequestBody BoadRequestDto boad) {
-        return boadService.BoadInsertTemp(request, boad);
     }
 
     /*게시물 수정*/

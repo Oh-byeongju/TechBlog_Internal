@@ -31,7 +31,6 @@ export default function ScrollRestoreProvider() {
         requestAnimationFrame(() => {
             requestAnimationFrame(() => {
                 sessionStorage.setItem(`scroll-${url}`, String(y))
-                console.log(`[ScrollSave] ${url} → ${y}px`)
             })
         })
     }
@@ -42,9 +41,6 @@ export default function ScrollRestoreProvider() {
                 const y = sessionStorage.getItem(`scroll-${url}`)
                 if (y !== null) {
                     document.body.scrollTo(0, parseInt(y, 10));
-                    console.log(`[ScrollRestore] ${url} → ${y}px`)
-                } else {
-                    console.log(`[ScrollRestore] ${url} → no saved scroll`)
                 }
             })
         })

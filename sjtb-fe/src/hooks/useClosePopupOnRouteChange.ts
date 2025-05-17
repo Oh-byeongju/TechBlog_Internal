@@ -10,10 +10,8 @@ const useClosePopupsOnRouteChange = () => {
     const popupController = usePopup();
 
     useEffect(() => {
-        console.log("close");
         const handleRouteChangeStart = () => {
             popupController.closeAll();
-            console.log("close");
         };
 
         router.events.on('routeChangeStart', handleRouteChangeStart);

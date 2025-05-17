@@ -62,7 +62,6 @@ const useActionAndNavigate = () => {
             ...prev,
             routerState: true
         }))
-        console.log(`💾 [navigate] saved scrollY for ${pathname}: ${scrollY}px`);
 
         !!action && action();
         router.push(url);

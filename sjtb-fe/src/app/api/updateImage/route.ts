@@ -35,7 +35,6 @@ async function fetchImage(topic: string, perPage: number) {
 cron.schedule('*/30 * * * *', async () => {
     const imageUrl = await fetchImage(globalState.getLastTopic(), globalState.getLastPerPage());
     globalState.setImageUrl(imageUrl);
-    console.log(`New random image URL updated: ${imageUrl}`);
 });
 
 export async function GET(req: NextRequest) {
@@ -48,7 +47,6 @@ export async function GET(req: NextRequest) {
         if (!globalState.getImageUrl()) {
             const imageUrl = await fetchImage(topic, perPage);
             globalState.setImageUrl(imageUrl);
-            console.log(`First image URL updated: ${imageUrl}`);
         }
         globalState.setLastTopic(topic);
         globalState.setLastPerPage(perPage);

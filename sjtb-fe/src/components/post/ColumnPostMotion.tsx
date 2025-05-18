@@ -1,6 +1,6 @@
 'use client';
 
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import Image from 'next/image';
 
 import {IPostData} from "@/types/interfaces/post-interface";
@@ -11,21 +11,7 @@ import RowContainer from "@/components/containers/RowContainer";
 
 const ColumnPostMotion = ({posts = []}: { posts: IPostData[] }) => {
     const actionAndNavigate = useActionAndNavigate();
-    const [activeIndex, setActiveIndex] = useState<boolean>(false);
-
-    const handleMouseEnter = () => {
-        setActiveIndex(true);
-    };
-
-    const handleMouseLeave = () => {
-        setActiveIndex(false);
-    };
-
-    /*
-    useEffect(() => {
-        document.documentElement.style.setProperty('--post-count', `${posts.length}`);
-    }, [posts.length]);
-    */
+    const [activeIndex, setActiveIndex] = useState<number | null>(null)
 
     return (
         <RowContainer>
@@ -34,8 +20,8 @@ const ColumnPostMotion = ({posts = []}: { posts: IPostData[] }) => {
                     <button
                         key={postData.slug + postData.author + postData.datePublished}
                         className={styles.postContainer}
-                        onMouseEnter={() => handleMouseEnter()}
-                        onMouseLeave={handleMouseLeave}
+                        onMouseEnter={() => setActiveIndex(index)}
+                        onMouseLeave={() => setActiveIndex(null)}
                         onClick={() => actionAndNavigate.actionAndNavigate(`/board/${postData.slug}`)}
                     >
                         <Image src={`${postData.thumbnail ? postData.thumbnail : "/images/banner.jpg"}`} alt='' fill
@@ -45,7 +31,7 @@ const ColumnPostMotion = ({posts = []}: { posts: IPostData[] }) => {
                             <p className={styles.title}>{postData.title}</p>
                             <p>{`${postData.dateModified} | ${postData.author}`}</p>
                             {
-                                activeIndex === true &&
+                                activeIndex === index &&
                                 <p className={styles.excerpt}>
                                     {postData.description}
                                 </p>
@@ -54,7 +40,6 @@ const ColumnPostMotion = ({posts = []}: { posts: IPostData[] }) => {
                     </button>
                 )
             }
-
         </RowContainer>
     );
 };

@@ -162,66 +162,81 @@ public class GptService extends BaseService {
 
         log.info("파일이 성공적으로 수정되었습니다.");
         log.info("########## update Row Count : " + updateRowCnt);
-
-
-
     }
 
-    public ResultVo<GptResponseDto> processGPTAPI(String jobCate, String userId, String cont, String userIp){
+    public ResultVo<GptResponseDto> processGPTAPI(String jobCate, String userId, String cont, String userIp) {
         ResultVo<GptResponseDto> resultVO = new ResultVo<>(GptResponseDto.class);
         GptResponseDto result = new GptResponseDto();
         RestTemplate restTemplate = new RestTemplate();
         ObjectMapper objectMapper = new ObjectMapper();
+
         String processYN = "N";
         String resultCont = "";
         String systemSetMsg = "";
         int maxToken = 0;
-        if(jobCate.equals(FrameConstants.CHATAPI_CHAT)) {
+
+        // 프롬프트 설정 및 토큰 수 설정
+        if (jobCate.equals(FrameConstants.CHATAPI_CHAT)) {
             systemSetMsg = "마크다운 게시물을 작성하는데 도움이 되는 내용으로 답변을 구성해줘";
             maxToken = FrameConstants.CHAT_MAX_TOKEN_VALUE;
-        } else if(jobCate.equals(FrameConstants.CHATAPI_SUMMARY)){
-            systemSetMsg =  "질문으로 들어오는 내용에 대해서 비즈니스 문법으로 요약해줘. " +
-                    "그리고 해당 내용에 대한 해시태그를 최대 10개까지 만들어줘. " +
-                    "해시태그는 구분자로 쉼표를 사용하고 요약내용과 해시태그 목록은 '||'를 이용해서 앞에는 요약내용, 뒤에는 해시태그 목록을 나눠서 출력해줘";
+        } else if (jobCate.equals(FrameConstants.CHATAPI_SUMMARY)) {
+            systemSetMsg =
+                    "질문으로 들어오는 내용에 대해서 비즈니스 문법으로 요약해줘. " +
+                            "그리고 해당 내용에 대한 해시태그를 최대 10개까지 만들어줘. " +
+                            "해시태그는 구분자로 쉼표를 사용하고 요약내용과 해시태그 목록은 '||'를 이용해서 앞에는 요약내용, 뒤에는 해시태그 목록을 나눠서 출력해줘";
             maxToken = FrameConstants.SUMMARY_MAX_TOKEN_VALUE;
         }
 
         try {
+            // 헤더 구성 (Authorization, Content-Type)
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_JSON);
             headers.set("Authorization", "Bearer " + FrameConstants.CHATAPI_KEY);
 
+            // 메시지 구성: system 메시지 + user 질문
             List<Map<String, String>> messages = new ArrayList<>();
 
-            // System message with preMessage
             Map<String, String> systemMessage = new HashMap<>();
             systemMessage.put("role", "system");
             systemMessage.put("content", systemSetMsg);
             messages.add(systemMessage);
 
-            // User message with the question
             Map<String, String> userMessage = new HashMap<>();
             userMessage.put("role", "user");
-            userMessage.put("content",cont);
+            userMessage.put("content", cont);
             messages.add(userMessage);
+
             result.setQuestion(cont);
-            // 답변 가능한 최대 글자수, 사용 모델 설정
+
+            // API 요청 본문 구성
             Map<String, Object> requestBody = new HashMap<>();
             requestBody.put("messages", messages);
             requestBody.put("max_tokens", maxToken);
-            requestBody.put("model", FrameConstants.GPT_MODEL);//모델선택
-            if(jobCate.equals(FrameConstants.CHATAPI_CHAT)) {
+            requestBody.put("model", FrameConstants.GPT_MODEL);
+            if (jobCate.equals(FrameConstants.CHATAPI_CHAT)) {
                 requestBody.put("temperature", FrameConstants.CHAT_TEMP);
-            } else if(jobCate.equals(FrameConstants.CHATAPI_SUMMARY)){
+            } else if (jobCate.equals(FrameConstants.CHATAPI_SUMMARY)) {
                 requestBody.put("temperature", FrameConstants.SUMMRARY_TEMP);
             }
 
+            // HTTP 요청 전송
             HttpEntity<String> entity = new HttpEntity<>(objectMapper.writeValueAsString(requestBody), headers);
-            ResponseEntity<String> response = restTemplate.exchange(FrameConstants.CHATAPI_URL, HttpMethod.POST, entity, String.class);
+            ResponseEntity<String> response = restTemplate.exchange(
+                    FrameConstants.CHATAPI_URL,
+                    HttpMethod.POST,
+                    entity,
+                    String.class
+            );
+
+            // 응답 처리
             result.setResponsecode(response.getStatusCode().toString());
+
             if (response.getStatusCode() == HttpStatus.OK) {
                 log.info("############Response: " + response.getBody());
+
                 Map<String, Object> responseBody = objectMapper.readValue(response.getBody(), Map.class);
+
+                // 응답 메시지 추출
                 if (responseBody.containsKey("choices")) {
                     List<Map<String, Object>> choices = (List<Map<String, Object>>) responseBody.get("choices");
                     if (choices != null && !choices.isEmpty() && choices.get(0).containsKey("message")) {
@@ -231,11 +246,14 @@ public class GptService extends BaseService {
                         }
                     }
                 }
-                if(responseBody.containsKey("usage")){
+
+                // 토큰 사용량 추출
+                if (responseBody.containsKey("usage")) {
                     Map<String, Object> usage = (Map<String, Object>) responseBody.get("usage");
                     result.setRequesttoken((int) usage.get("prompt_tokens"));
                     result.setResponsetoken((int) usage.get("completion_tokens"));
                 }
+
                 processYN = "Y";
                 resultCont = result.getAnswer();
             } else {
@@ -244,6 +262,7 @@ public class GptService extends BaseService {
         } catch (Exception e) {
             resultCont = "ChatGPT API 호출 중 오류 발생";
         } finally {
+            //  DB에 로그 저장
             GptEntity gptEntity = GptEntity.builder()
                     .userid(userId)
                     .workcate(FrameConstants.CHATAPI_CHAT)
@@ -258,12 +277,17 @@ public class GptService extends BaseService {
                     .build();
 
             gptRepository.save(gptEntity);
+
+            // 최종 결과 세팅
             result.setProsuccyn(processYN);
             resultVO.setContent(result);
-            resultVO.setIsError((processYN.equals("Y") ? false : true));
-            if(!processYN.equals("Y")) {
+            resultVO.setIsError(!processYN.equals("Y"));
+
+            if (!processYN.equals("Y")) {
                 resultVO.setWarningMsg(resultCont);
             }
+
+            // summary 작업 시 추가 로그 저장
             if (jobCate.equals(FrameConstants.CHATAPI_SUMMARY)) {
                 saveServerLog(userId, jobCate, processYN);
             }

@@ -277,7 +277,7 @@ public class BoadService extends BaseService {
                 hashTagList = answerList[1].replaceAll("#","").replaceAll(",","");
             } else {
                 summary = makeInitSummarty(reqBoad);
-                hashTagList = "세정아이앤씨 기술블로그 게시물 개발자";
+                hashTagList = "기술블로그 게시물 개발자";
             }
 
             UserEntity user = userRepository.findById(userId);
@@ -394,7 +394,7 @@ public class BoadService extends BaseService {
     /*게시글 작성시 기본 summary 내용 입력*/
     public String makeInitSummarty(BoadRequestDto boad){
         String summary = "";
-        summary = "이 게시물은 "+boad.getTitle()+" 에 대한 내용입니다. 세정아이앤씨 기술 블로그에서 작성되었습니다.";
+        summary = "이 게시물은 "+boad.getTitle()+" 에 대한 내용입니다. 기술 블로그에서 작성되었습니다.";
         return summary;
     }
 
@@ -453,7 +453,7 @@ public class BoadService extends BaseService {
                     hashTagList = answerList[1].replaceAll("#","").replaceAll(",","");
             } else {
                 summary = makeInitSummarty(reqBoad);
-                hashTagList = "세정아이앤씨 기술블로그 게시물 개발자";
+                hashTagList = "기술블로그 게시물 개발자";
             }
 
             // 해시태그 전체 삭제

@@ -164,6 +164,7 @@ public class GptService extends BaseService {
         log.info("########## update Row Count : " + updateRowCnt);
     }
 
+    @Transactional
     public ResultVo<GptResponseDto> processGPTAPI(String jobCate, String userId, String cont, String userIp) {
         ResultVo<GptResponseDto> resultVO = new ResultVo<>(GptResponseDto.class);
         GptResponseDto result = new GptResponseDto();
@@ -260,6 +261,7 @@ public class GptService extends BaseService {
                 resultCont = "ChatGPT API 요청 실패: " + response.getStatusCode();
             }
         } catch (Exception e) {
+            log.error("[GPT] API 호출 중 예외 발생", e);
             resultCont = "ChatGPT API 호출 중 오류 발생";
         } finally {
             //  DB에 로그 저장

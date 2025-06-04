@@ -12,6 +12,11 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @SpringBootApplication
 public class SjtbBackendApplication {
 	public static void main(String[] args) {
+		// OpenAI API 통신을 위한 TLS 버전 추가
+		System.setProperty("https.protocols", "TLSv1.2");
+		String httpsProtocols = System.getProperty("https.protocols");
+		System.out.println("########## https.protocols: " + httpsProtocols);
+
 		SpringApplication.run(SjtbBackendApplication.class, args);
 	}
 }

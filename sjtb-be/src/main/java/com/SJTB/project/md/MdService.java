@@ -96,8 +96,8 @@ public class MdService extends BaseService {
 
             //기존 버전경로에 파일 저장
             writeMDFile(boad, boadConts, markdownFilePath);
-            //최신MD파일 경로에도 복사
-            writeMDFile(boad, boadConts, nonVersionPath);
+            //최신MD파일 경로에도 복사 (사용안함)
+//            writeMDFile(boad, boadConts, nonVersionPath);
 
             MdFileEntity mdFileEntity =  MdFileEntity.builder()
                                         .boadid(boad.getBoadId())

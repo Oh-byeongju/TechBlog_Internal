@@ -4,11 +4,11 @@
 - Spring Boot와 Next.js를 활용하여 개발한 기술 블로그 미니 프로젝트입니다.
 - 상황에 따라 Next.js의 다양한 렌더링 기법(SSR, CSR, SSG, ISR)을 적절히 활용하여 개발을 진행하였습니다.
 
-<img width="100%" alt="Service" src="https://github.com/user-attachments/assets/34572a47-d028-42d3-b789-71bafbf0bd5c"/>
+    <img width="100%" alt="Service" src="https://github.com/user-attachments/assets/34572a47-d028-42d3-b789-71bafbf0bd5c"/>
 
 - **해당 프로젝트는 내부 사용자를 위한 서비스로**, 블로그 내의 모든 기능을 자유롭게 사용할 수 있도록 구성되어 있습니다.
     
-<img width="100%" alt="Service" src="https://github.com/user-attachments/assets/3cc00bc4-dd96-4a04-a997-c10dc4eabe6f"/>
+    <img width="100%" alt="Service" src="https://github.com/user-attachments/assets/3cc00bc4-dd96-4a04-a997-c10dc4eabe6f"/>
     
 - 외부 사용자용 프로젝트 정보는 [링크](https://github.com/Oh-byeongju/TechBlog_External)를 참고해주세요.
 ### **2. 개발 기간**

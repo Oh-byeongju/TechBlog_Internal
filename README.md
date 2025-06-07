@@ -104,7 +104,7 @@ Route (app)                              Size     First Load JS
   <img width="85%" alt="Flow" src="https://github.com/user-attachments/assets/7ce83aa4-32cd-45a6-87f0-85342663c919" />
 </div>
 
-1. 사용자의 모든 요청은 `Next.js 미들웨어`를 거칩니다.
+1. 사용자의 모든 요청은 `Next.js` 미들웨어를 거칩니다.
 2. 미들웨어에서는 쿠키에 저장된 JWT 토큰(`AccessToken`)을 읽어, `Authorization` 헤더에 추가합니다.
 3. 이후, 백엔드(Spring Boot) API 서버로 **요청을 리다이렉트**하면서, 필요한 헤더 정보들을 함께 전달합니다.
 
@@ -144,6 +144,43 @@ export function middleware(request: NextRequest) {
       }
   );
 }
+```
+
+## **7. 기능 소개 Wiki**
+
+**1️⃣ 메인화면 - [상세보기](https://github.com/Oh-byeongju/TechBlog_Internal/wiki/1.-%EB%A9%94%EC%9D%B8%ED%99%94%EB%A9%B4)**
+
+```
+- 인기 게시물 조회
+- 전체 게시물 조회
+- 다크모드 지원
+- 반응형 웹 지원
+- 게시물 검색
+```
+
+**2️⃣ 회원 - [상세보기](https://github.com/Oh-byeongju/TechBlog_Internal/wiki/2.-%ED%9A%8C%EC%9B%90)**
+
+```
+- 회원가입
+- 로그인 (JWT 기반)
+- 회원정보 수정
+- 내가 쓴 게시물 조회
+```
+
+**3️⃣ 게시물 - [상세보기](https://github.com/Oh-byeongju/TechBlog_Internal/wiki/3.-%EA%B2%8C%EC%8B%9C%EB%AC%BC)**
+
+```
+- 게시물 상세조회
+- 개시물 공감
+- 게시물 작성, 수정, 삭제
+- 댓글 작성, 삭제
+```
+
+**4️⃣ AI - [상세보기](https://github.com/Oh-byeongju/TechBlog_Internal/wiki/4.-AI)**
+
+```
+- 사용자가 작성한 게시물 요약
+- 게시물 내용을 기반으로 한 해시태그 추출
 ```
 
 ## 추가로 구현할 내용

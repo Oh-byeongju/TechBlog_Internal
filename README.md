@@ -171,7 +171,7 @@ export function middleware(request: NextRequest) {
 
 ```
 - 게시물 상세조회
-- 개시물 공감
+- 게시물 공감
 - 게시물 작성, 수정, 삭제
 - 댓글 작성, 삭제
 ```

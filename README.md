@@ -10,7 +10,7 @@
     
     <img width="100%" alt="Service" src="https://github.com/user-attachments/assets/3cc00bc4-dd96-4a04-a997-c10dc4eabe6f"/>
     
-- 외부 사용자용 프로젝트 정보는 [기술 블로그 (외부 사용자)](https://github.com/Oh-byeongju/TechBlog_External)를 참고해주세요.
+- 외부 사용자용 프로젝트 정보는 [기술 블로그 (외부 사용자)](https://github.com/Oh-byeongju/tech-blog-external)를 참고해주세요.
 ### **2. 개발 기간**
 - 2024.08.01 ~ 2024.12.31
 
@@ -148,7 +148,7 @@ export function middleware(request: NextRequest) {
 
 ## **7. 기능 소개 Wiki**
 
-**1️⃣ 메인화면 - [상세보기](https://github.com/Oh-byeongju/TechBlog_Internal/wiki/1.-%EB%A9%94%EC%9D%B8%ED%99%94%EB%A9%B4)**
+**1️⃣ 메인화면 - [상세보기](https://github.com/Oh-byeongju/tech-blog-internal/wiki/1.-%EB%A9%94%EC%9D%B8%ED%99%94%EB%A9%B4)**
 
 ```
 - 인기 게시물 조회
@@ -158,7 +158,7 @@ export function middleware(request: NextRequest) {
 - 게시물 검색
 ```
 
-**2️⃣ 회원 - [상세보기](https://github.com/Oh-byeongju/TechBlog_Internal/wiki/2.-%ED%9A%8C%EC%9B%90)**
+**2️⃣ 회원 - [상세보기](https://github.com/Oh-byeongju/tech-blog-internal/wiki/2.-%ED%9A%8C%EC%9B%90)**
 
 ```
 - 회원가입
@@ -167,7 +167,7 @@ export function middleware(request: NextRequest) {
 - 내가 쓴 게시물 조회
 ```
 
-**3️⃣ 게시물 - [상세보기](https://github.com/Oh-byeongju/TechBlog_Internal/wiki/3.-%EA%B2%8C%EC%8B%9C%EB%AC%BC)**
+**3️⃣ 게시물 - [상세보기](https://github.com/Oh-byeongju/tech-blog-internal/wiki/3.-%EA%B2%8C%EC%8B%9C%EB%AC%BC)**
 
 ```
 - 게시물 상세조회
@@ -176,7 +176,7 @@ export function middleware(request: NextRequest) {
 - 댓글 작성, 삭제
 ```
 
-**4️⃣ AI - [상세보기](https://github.com/Oh-byeongju/TechBlog_Internal/wiki/4.-AI)**
+**4️⃣ AI - [상세보기](https://github.com/Oh-byeongju/tech-blog-internal/wiki/4.-AI)**
 
 ```
 - 사용자가 작성한 게시물 요약
